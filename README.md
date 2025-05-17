@@ -1,66 +1,141 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# La base
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Projet Vierge avec breeze pour l'authentification et espero soft pour la partie crud
 
-## About Laravel
+## Installation locale
+### 1. Cloner le projet
+```
+git clone 'depot git'
+cd 'depot git'
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+```
+### 2. Installer les dépendances backend (PHP / Laravel)
+### 2.1 Si vous avez une erreur c'est que php n'est pas déclaré dans les variables d'environnements (voir 2.2)
+```
+composer install
+```
+### 2.2 Attention si la version de php n'est pas correcte! Changez la variable d'environnement
+```
+Sysdm.cpl
+```
+### 2.2.1 Dans les propriété système => Paramètres systèmes avancés => Variables d'environnement
+### 2.2.2 Dans Variables système => Path => Modifier (correspondant à votre version de PHP):
+```
+C:\wamp64\bin\php\php8.2
+```
+### 3. Installer les dépendances frontend
+```
+npm install
+npm install sass --save-dev
+```
+### 3.1 Si vous n'avez pas installé Node.js (et donc npm):
+```
+Rendez-vous ici : https://nodejs.org/
+```
+### Et téléchargez Node.js LTS, puis vérifier l'installation
+```
+npm -v
+```
+### Si l'execution des scripts est désactivé sur le pc, la réactiver temporarirement pour executer l'installation de NPM
+```
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+### 4. Copier le fichier .env
+```
+cp .env.example .env
+```
+### 5. Générer la clé d'application Laravel
+```
+php artisan key:generate
+```
+### 6. Configurer la base de données dans .env, puis :
+```
+php artisan migrate
+```
+## Lancer le projet en développement
+### 1. Compiler les assets (Vite)
+```
+npm run dev
+```
+### 2. Démarrer le serveur Laravel
+```
+php artisan serve
+```
+## Configuration de Vite
+(vite.config.js)
+```
+import { defineConfig } from 'vite';
+import laravel from 'laravel-vite-plugin';
+export default defineConfig({
+plugins: [
+laravel({
+input: [
+'resources/sass/app.scss',
+'resources/js/app.js'
+],
+refresh: true,
+}),
+],
+});
+```
+## reCAPTCHA Google
+Le projet utilise le package anhskohbo/no-captcha pour protéger le formulaire de contact.
+Installation avec Composer 2 :
+```
+composer require anhskohbo/no-captcha
+```
+Composer 2 est requis. Si votre serveur utilise encore Composer 1 :
+```
+php -r "copy('https://getcomposer.org/download/2.7.2/composer.phar', 'composer2');"
+chmod +x composer2
+```
+```
+mkdir -p ~/bin
+mv composer2 ~/bin/composer
+export PATH="$HOME/bin:$PATH"
+```
+```
+composer --version
+```
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Déploiement sur un serveur (Hostinger ou autre)
+1. Mettre à jour les dépendances PHP avec Composer 2
+```
+php -d memory_limit=-1 ~/bin/composer update
+```
+2. Créer le lien symbolique vers storage
+```
+rm -rf public/storage
+php artisan storage:link
+```
+3. Compiler les assets pour la production
+```
+npm run build
+```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Astuce : mémoire insuffisante sur certains serveurs
+```
+php -d memory_limit=-1 /usr/local/bin/composer1.phar require anhskohbo/no-captcha
+```
+## Routes utiles
+Page d'accueil: /
+Formulaire de contact: /#contact
+Connexion utilisateur: /login
+Tableau de bord admin: /admin/realizations
+Gestion des utilisateurs: /admin/users
 
-## Learning Laravel
+## Technologies utilisées
+- Laravel 10
+- Vite
+- SASS
+- Composer 2
+- PHP 8.2
+- Google reCAPTCHA v2
+- MySQL
+- Hébergement mutualisé (Hostinger)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# Contact
+Développé par l'Atelier Normand du Web
+? doko972@gmail.com
+? [Atelier Normand du Web](https://ateliernormandduweb.fr/)
